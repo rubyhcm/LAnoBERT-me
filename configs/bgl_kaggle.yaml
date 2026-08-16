@@ -45,7 +45,7 @@ train:
   seed: 42
   fp16: true
   bf16: false
-  resume_from_checkpoint: true
+  resume_from_checkpoint: false
 
 inference:
   hf_model: null
