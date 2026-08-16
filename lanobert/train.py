@@ -203,8 +203,14 @@ def train(cfg, vocab_file: Optional[str] = None) -> str:
         eval_dataset=eval_dataset,
     )
 
-    print("[train] start")
-    trainer.train()
+    resume = tcfg.get("resume_from_checkpoint", None)
+    # - None or False  -> train from scratch
+    # - True           -> Trainer auto-detects latest checkpoint in output_dir
+    # - "path/to/ckpt" -> resume from that specific checkpoint
+    if resume is False:
+        resume = None
+    print("[train] start" + (f" (resuming from {resume})" if resume else ""))
+    trainer.train(resume_from_checkpoint=resume)
 
     final_dir = os.path.join(model_dir, "final")
     trainer.save_model(final_dir)
